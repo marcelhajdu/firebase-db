@@ -6,7 +6,7 @@
   <script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-analytics.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-database.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
 <body>
 <div id="chat" class="container">
@@ -54,6 +54,8 @@
   firebase.analytics();
 
   const database = firebase.database()
+  //our messages object in firebase
+  const messagesRef = database.ref('messages')
   
 
   new Vue({
@@ -65,14 +67,15 @@
     },
     methods: {
       storeMessage () {
-        this.messages.push({text: this.messageText, nickname: this.nickname})
+        //the push method generates a new id in the messages object and  populates the 
+        //row with our data
+        messagesRef.push({text: this.messageText, nickname: this.nickname})
         this.messageText = ''
       }
     },
     created () {
       //reads messages from the database to the screen
-      //dokumentacioban megnezni, hogy mit jelentenek ezek a variablek
-      database.ref('messages').on('child_added', snapshot => this.messages.push(snapshot.val()))
+      messagesRef.on('child_added', snapshot => this.messages.push(snapshot.val()))
     }
   })
 </script>
