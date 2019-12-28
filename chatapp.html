@@ -53,6 +53,7 @@
   firebase.initializeApp(firebaseConfig);
   firebase.analytics();
 
+  //a database constans lesz a firebase database funkcioja
   const database = firebase.database()
   //our messages object in firebase
   const messagesRef = database.ref('messages')
@@ -67,14 +68,19 @@
     },
     methods: {
       storeMessage () {
-        //the push method generates a new id in the messages object and  populates the 
-        //row with our data
+        /*the push method generates a new id in the messages object and  populates the 
+        row with our data*/
+        //a messagesref-re meghivjuk a pusht es kuldunk egy new child-ot, a text lesz a 
+        //messageText a Vue-bol, a nickname pedig marad a nickname
         messagesRef.push({text: this.messageText, nickname: this.nickname})
+        //utana nullazuk a messageTextet
         this.messageText = ''
       }
     },
     created () {
-      //reads messages from the database to the screen
+      /*reads messages from the database to the screen*/
+      //a messagesRef-re meghivjuk az on funkciot, atadunk egy 'child added' parametert
+      //es callbacknek pedig pusholjuk a snapshot.val()-jat
       messagesRef.on('child_added', snapshot => this.messages.push(snapshot.val()))
     }
   })
